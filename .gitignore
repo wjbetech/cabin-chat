@@ -1,0 +1,43 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Environment files and secrets
+.env
+.env.*
+!.env.example
+
+# Go build artifacts
+bin/
+dist/
+tmp/
+temp/
+coverage/
+coverage.out
+*.coverprofile
+*.test
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Frontend dependencies and build output
+node_modules/
+dist-ssr/
+*.tsbuildinfo
+vite.svg
+
+# Local uploaded files
+uploads/
+storage/
+
+# Generated cache directories
+.cache/
