@@ -14,7 +14,11 @@ func Load() (*Config, error) {
 		Port:      getEnv("CABIN_CHAT_PORT", "1111"),
 		JWTSecret: getEnv("CABIN_CHAT_JWT_SECRET", "CabinCrew0726"),
 		// This needs to be updated with the actual URL later
-		DatabaseURL: getEnv("CABIN_CHAT_DATABASE_URL", "postgres://user:password@localhost:5432/dbname"),
+		// An empty string URL now means:
+		// - no DB is configured
+		// - skip DB connection attempts
+		// - server still starts
+		DatabaseURL: getEnv("CABIN_CHAT_DATABASE_URL", ""),
 		UploadDir:   getEnv("CABIN_CHAT_UPLOAD_DIR", "./uploads"),
 	}
 	return cfg, nil
