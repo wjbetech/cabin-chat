@@ -17,21 +17,21 @@ The project is being built in Go with PostgreSQL for persistent storage, and Doc
 The project is currently in `Phase 2 - Backend MVP`, and at this stage the Go server can:
 
 - load the config from env vars
-- start an HTTP server
+- expose a health endpoint
 - exposes a health endpoint
 - optionally connect to PostgreSQL if a DB URL is configured
 
-Current work focuses on wiring the core architecture first, then replacing in-memory behavior with PostgreSQL-backed implementation.
+Current work focuses on wiring the core architecture first, then replacing in-memory behavior with PostgreSQL-backed implementations.
 
 ## Backend Architecture
 
 The backend is currently organized into a few small packages:
 
 - an entry point for the app at `cmd/cabin-chat`
-- app config config defined in the `/pkg/env` directory
-- A bootstrapped DB connection defined in the `/pkg/db` directory
-- A set of core domain models, primarily defined as `User`, `Message` and `Reaction` in the `/pkg/chat` directory
-- A store for the repo interfaces and in-memory store groundwork in the `/pkg/store` directory
+- app config defined in the `/pkg/env` directory
+- a bootstrapped DB connection defined in the `/pkg/db` directory
+- a set of core domain models, primarily defined as `User`, `Message` and `Reaction` in the `/pkg/chat` directory
+- a store for the repo interfaces and in-memory store groundwork in the `/pkg/store` directory
 - `documentation/roadmap.md` contains the current implementation checklist and build plan, which may be helpful to contributors
 
 #### Current BE Status
@@ -67,7 +67,7 @@ The backend currently uses the following environment variables:
 Example values:
 
 ```env
-CABIN_CHAT_PORT=port
+CABIN_CHAT_PORT=1111
 CABIN_CHAT_JWT_SECRET=change-me
 CABIN_CHAT_DATABASE_URL=postgres://cabin_admin:cabin_admin@localhost:port/cabin_chat?sslmode=disable
 CABIN_CHAT_UPLOAD_DIR=./uploads
@@ -89,7 +89,7 @@ A typical workflow might look like this:
 
 ```bash
 docker compose up -d postgres
-export CABIN_CHAT_DATABASE_URL="postgres://username:password@localhost:port/cabin_chat?sslmode=disable"
+export CABIN_CHAT_DATABASE_URL="postgres://cabin_admin:cabin_admin@localhost:1122/cabin_chat?sslmode=disable"
 go run ./cmd/cabin-chat
 ```
 
