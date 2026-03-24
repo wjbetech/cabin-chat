@@ -125,6 +125,16 @@ Tasks:
 - [x] Define the reaction model
 - [x] Create repository interfaces in `pkg/store`
 - [ ] Add database setup in `pkg/db`
+  - [x] Add initial DB connection setup in /pkg/db.
+  - [ ] Create a docker-compose.yml file
+  - [ ] Build a persistent volume for the DB
+  - [ ] DB credentials and env setup
+  - [ ] Document startup steps for clonability
+- [ ] Create a schema for the DB
+  - [ ] Build tables for users, messages and reactions
+  - [ ] Decide on SQL bootstrapping scripts or a migration approach
+- [ ] Add DB-backed store implementations
+  - [ ] Create Postgres-backed versions of the interfaces in the repo
 - [ ] Add password hashing with bcrypt
 - [ ] Add JWT creation and validation
 - [ ] Add signup endpoint
