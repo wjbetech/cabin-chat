@@ -1,0 +1,26 @@
+# aims of this docker-compose.yml file:
+# - run Postgres locally
+# - keep the data persistent across container restarts
+# - give the Go app something real to connect to
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: cabin-chat-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: cabin_admin
+      POSTGRES_PASSWORD: cabin_admin
+      POSTGRES_DB: cabin_chat
+    ports:
+      - "1122:5432"
+    volumes:
+      - cabin_chat_postgres_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cabin_admin -d cabin_chat"]
+      interval: 20s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  cabin_chat_postgres_db:
