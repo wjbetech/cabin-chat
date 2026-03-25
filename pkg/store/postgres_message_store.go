@@ -61,7 +61,7 @@ func (store *PostgresMessageStore) CreateMessage(ctx context.Context, message ch
 func (store *PostgresMessageStore) GetMessagesByRoomID(ctx context.Context, roomID string) ([]chat.Message, error) {
 	rows, err := store.db.QueryContext(
 		ctx,
-		`SELECT id, content, user_id, room_id, created_at FROM messages WHERE room_id = $1 ORDER BY created_at ASC`,
+		`SELECT id, content, user_id, room_id, created_at FROM messages WHERE room_id = $1 ORDER BY created_at ASC, id ASC`,
 		roomID,
 	)
 

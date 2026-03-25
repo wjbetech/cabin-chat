@@ -243,3 +243,100 @@ func TestPostgresMessageStore_GetMessagesByRoomID_EmptyRoom(t *testing.T) {
 		t.Fatalf("expected 0 messages, got %d", len(messages))
 	}
 }
+
+func TestPostgresMessageStore_GetMessagesByRoomID_SameTimestampUsesIDTiebreaker(t *testing.T) {
+	databaseURL := os.Getenv("CABIN_CHAT_DATABASE_URL")
+
+	if databaseURL == "" {
+		t.Skip("CABIN_CHAT_DATABASE_URL is not set!")
+	}
+
+	ctx := context.Background()
+
+	postgresDB, err := db.OpenPostgres(ctx, databaseURL)
+	if err != nil {
+		t.Fatalf("open postgres connection: %v", err)
+	}
+
+	defer postgresDB.Close()
+
+	_, err = postgresDB.ExecContext(ctx, "TRUNCATE TABLE reactions, messages, rooms, users CASCADE")
+	if err != nil {
+		t.Fatalf("truncate tables: %v", err)
+	}
+
+	userStore := NewPostgresUserStore(postgresDB)
+	messageStore := NewPostgresMessageStore(postgresDB)
+
+	user := chat.User{
+		ID:             id.New(),
+		Username:       "message-tiebreak-user",
+		HashedPassword: "testpassword",
+		CreatedAt:      time.Now().UTC(),
+		Status:         "offline",
+		AvatarURL:      "",
+	}
+
+	err = userStore.CreateUser(ctx, user)
+	if err != nil {
+		t.Fatalf("CreateUser returned an error: %v", err)
+	}
+
+	roomID := id.New()
+
+	_, err = postgresDB.ExecContext(
+		ctx,
+		`INSERT INTO rooms (id, name, created_at) VALUES ($1, $2, $3)`,
+		roomID,
+		"tiebreak-room",
+		time.Now().UTC(),
+	)
+	if err != nil {
+		t.Fatalf("insert room: %v", err)
+	}
+
+	sameCreatedAt := time.Date(2026, 3, 25, 12, 0, 0, 0, time.UTC)
+
+	firstByID := chat.Message{
+		ID:        "11111111-1111-1111-1111-111111111111",
+		UserID:    user.ID,
+		RoomID:    roomID,
+		Content:   "first by id",
+		CreatedAt: sameCreatedAt,
+	}
+
+	secondByID := chat.Message{
+		ID:        "22222222-2222-2222-2222-222222222222",
+		UserID:    user.ID,
+		RoomID:    roomID,
+		Content:   "second by id",
+		CreatedAt: sameCreatedAt,
+	}
+
+	err = messageStore.CreateMessage(ctx, secondByID)
+	if err != nil {
+		t.Fatalf("CreateMessage returned an error for secondByID: %v", err)
+	}
+
+	err = messageStore.CreateMessage(ctx, firstByID)
+	if err != nil {
+		t.Fatalf("CreateMessage returned an error for firstByID: %v", err)
+	}
+
+	messages, err := messageStore.GetMessagesByRoomID(ctx, roomID)
+	if err != nil {
+		t.Fatalf("GetMessagesByRoomID returned an error: %v", err)
+	}
+
+	if len(messages) != 2 {
+		t.Fatalf("expected 2 messages, got %d", len(messages))
+	}
+
+	if messages[0].ID != firstByID.ID {
+		t.Fatalf("expected first result to be %s, got %s", firstByID.ID, messages[0].ID)
+	}
+
+	if messages[1].ID != secondByID.ID {
+		t.Fatalf("expected second result to be %s, got %s", secondByID.ID, messages[1].ID)
+	}
+}
