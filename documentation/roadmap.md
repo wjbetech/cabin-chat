@@ -138,7 +138,7 @@ Tasks:
   - [x] Use UUID columns in Postgres for primary keys
   - [x] Decide to generate UUIDs in Go rather than in Postgres
   - [x] Add UUID generation to the write path for new records
-- [ ] Add DB-backed store implementations
+- [x] Add DB-backed store implementations
   - [x] Create a Postgres-backed user store
     - [x] Create a user successfully
     - [x] Fetch that user by ID
@@ -150,11 +150,11 @@ Tasks:
     - [x] Fetch messages by room ID
     - [x] Ensure messages are returned in a sensible chronological order
     - [x] Ensure missing room lookups return an empty result without crashing
-  - [ ] Create a Postgres-backed reaction store
-    - [ ] Create a reaction successfully
-    - [ ] Fetch reactions by message ID
-    - [ ] Ensure duplicate reactions are rejected by the unique constraint
-    - [ ] Ensure reactions are removed correctly
+  - [x] Create a Postgres-backed reaction store
+    - [x] Create a reaction successfully
+    - [x] Fetch reactions by message ID
+    - [x] Ensure duplicate reactions are rejected by the unique constraint
+    - [x] Ensure reactions are removed correctly
 - [ ] Add password hashing with bcrypt
 - [ ] Add JWT creation and validation
 - [ ] Add signup endpoint
