@@ -124,17 +124,37 @@ Tasks:
 - [x] Define the message model
 - [x] Define the reaction model
 - [x] Create repository interfaces in `pkg/store`
-- [ ] Add database setup in `pkg/db`
-  - [x] Add initial DB connection setup in /pkg/db.
-  - [ ] Create a docker-compose.yml file
-  - [ ] Build a persistent volume for the DB
-  - [ ] DB credentials and env setup
-  - [ ] Document startup steps for clonability
-- [ ] Create a schema for the DB
-  - [ ] Build tables for users, messages and reactions
-  - [ ] Decide on SQL bootstrapping scripts or a migration approach
+- [x] Add database setup in `pkg/db`
+  - [x] Add initial DB connection setup in `pkg/db`
+  - [x] Create a docker-compose.yml file
+  - [x] Build a persistent volume for the DB
+  - [x] DB credentials and env setup
+  - [x] Document startup steps for clonability
+- [x] Create a schema for the DB
+  - [x] Build tables for users, rooms, messages, and reactions
+  - [x] Decide on SQL bootstrapping scripts or a migration approach
+  - [x] Apply the initial schema successfully to local Postgres
+- [x] Finalize UUID strategy for persistence
+  - [x] Use UUID columns in Postgres for primary keys
+  - [x] Decide to generate UUIDs in Go rather than in Postgres
+  - [x] Add UUID generation to the write path for new records
 - [ ] Add DB-backed store implementations
-  - [ ] Create Postgres-backed versions of the interfaces in the repo
+  - [x] Create a Postgres-backed user store
+    - [x] Create a user successfully
+    - [x] Fetch that user by ID
+    - [x] Fetch that user by username
+    - [x] Ensure duplicate username returns the expected error
+    - [x] Ensure missing users return the expected not-found error
+  - [x] Create a Postgres-backed message store
+    - [x] Create a message successfully
+    - [x] Fetch messages by room ID
+    - [x] Ensure messages are returned in a sensible chronological order
+    - [x] Ensure missing room lookups return an empty result without crashing
+  - [ ] Create a Postgres-backed reaction store
+    - [ ] Create a reaction successfully
+    - [ ] Fetch reactions by message ID
+    - [ ] Ensure duplicate reactions are rejected by the unique constraint
+    - [ ] Ensure reactions are removed correctly
 - [ ] Add password hashing with bcrypt
 - [ ] Add JWT creation and validation
 - [ ] Add signup endpoint
@@ -144,6 +164,13 @@ Tasks:
 - [ ] Create the WebSocket hub
 - [ ] Broadcast messages to connected clients
 - [ ] Run `go fmt ./...`
+
+Implementation notes:
+
+- The app currently runs on the host machine while Postgres runs in Docker via Compose.
+- The local database schema is now in place and applied successfully.
+- UUID generation should happen in Go for now, not in Postgres. This keeps record creation logic simpler while the backend is still being built.
+- Postgres-backed stores should be added incrementally, starting with users, then messages, then reactions.
 
 Done when:
 
