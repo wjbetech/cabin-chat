@@ -27,7 +27,7 @@ echo "*** BUILD COMPLETED ***"
 echo 
 
 echo "Running Go tests..."
-go test -v ./...
+GOTMPDIR="$PWD/.tmp/go-build" go test -p 1 -v ./...
 
 echo
 
