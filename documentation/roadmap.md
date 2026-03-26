@@ -156,7 +156,31 @@ Tasks:
     - [x] Ensure duplicate reactions are rejected by the unique constraint
     - [x] Ensure reactions are removed correctly
 - [ ] Add password hashing with bcrypt
+  - [x] Add the bcrypt dependency to the Go module
+  - [x] Create a dedicated password helper package or file
+  - [x] Add a function to hash a plain-text password
+  - [x] Add a function to compare a plain-text password against a stored hash
+  - [x] Ensure the hash output is never treated as reversible encryption
+  - [x] Add tests for successful password hashing
+  - [x] Add tests proving the same password does not produce a reusable plain-text value
+  - [x] Add tests for successful password comparison
+  - [x] Add tests for failed password comparison with the wrong password
+  - [x] Decide where hashing should happen in the signup flow before persistence
 - [ ] Add JWT creation and validation
+  - [ ] Choose a JWT library for signing and parsing tokens
+  - [ ] Create a dedicated JWT helper file in `pkg/auth`
+  - [ ] Decide which claims Cabin Chat needs in the token
+  - [ ] Add a function to generate a signed access token for a user
+  - [ ] Add a function to parse and validate an incoming token string
+  - [ ] Ensure token validation fails for malformed tokens
+  - [ ] Ensure token validation fails when the signing secret is wrong
+  - [ ] Ensure token validation fails for expired tokens
+  - [ ] Add tests for successful token generation
+  - [ ] Add tests for successful token validation
+  - [ ] Add tests for invalid signature handling
+  - [ ] Add tests for malformed token handling
+  - [ ] Add tests for expired token handling
+  - [ ] Decide how authenticated user identity will be attached to request handling later
 - [ ] Add signup endpoint
 - [ ] Add login endpoint
 - [ ] Add authenticated profile or session-check endpoint
