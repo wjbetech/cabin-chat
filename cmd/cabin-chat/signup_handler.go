@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
+	"github.com/wjbetech/cabin-chat/pkg/auth"
 	"github.com/wjbetech/cabin-chat/pkg/store"
 )
 
@@ -45,6 +46,16 @@ func (handler signupHandler) handle(writer http.ResponseWriter, request *http.Re
 		
 		return
 	}
+	
+	hashedPassword, err := auth.HashPassword(signupReq.Password)
+	
+	if err != nil {
+		http.Error(writer, "failed to hash password", http.StatusInternalServerError)
+		
+		return
+	}
+	
+	_ = hashedPassword
 	
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }

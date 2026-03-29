@@ -185,8 +185,8 @@ Tasks:
   - [x] Create signup request and response types
   - [x] Add an HTTP handler for `POST /signup`
   - [x] Parse and validate the incoming JSON body
-  - [ ] Reject requests with missing username or password
-  - [ ] Hash the submitted password before building the user model
+  - [x] Reject requests with missing username or password
+  - [x] Hash the submitted password before building the user model
   - [ ] Create a new user record through the user store
   - [ ] Translate duplicate-username errors into the correct HTTP response
   - [ ] Generate an access token for the newly created user
