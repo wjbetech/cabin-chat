@@ -166,22 +166,36 @@ Tasks:
   - [x] Add tests for successful password comparison
   - [x] Add tests for failed password comparison with the wrong password
   - [x] Decide where hashing should happen in the signup flow before persistence
-- [ ] Add JWT creation and validation
-  - [ ] Choose a JWT library for signing and parsing tokens
-  - [ ] Create a dedicated JWT helper file in `pkg/auth`
-  - [ ] Decide which claims Cabin Chat needs in the token
-  - [ ] Add a function to generate a signed access token for a user
-  - [ ] Add a function to parse and validate an incoming token string
-  - [ ] Ensure token validation fails for malformed tokens
-  - [ ] Ensure token validation fails when the signing secret is wrong
-  - [ ] Ensure token validation fails for expired tokens
-  - [ ] Add tests for successful token generation
-  - [ ] Add tests for successful token validation
-  - [ ] Add tests for invalid signature handling
-  - [ ] Add tests for malformed token handling
-  - [ ] Add tests for expired token handling
-  - [ ] Decide how authenticated user identity will be attached to request handling later
+- [-] Add JWT creation and validation
+  - [x] Choose a JWT library for signing and parsing tokens
+  - [x] Create a dedicated JWT helper file in `pkg/auth`
+  - [x] Decide which claims Cabin Chat needs in the token
+  - [x] Add a function to generate a signed access token for a user
+  - [x] Add a function to parse and validate an incoming token string
+  - [x] Ensure token validation fails for malformed tokens
+  - [x] Ensure token validation fails when the signing secret is wrong
+  - [x] Ensure token validation fails for expired tokens
+  - [x] Add tests for successful token generation
+  - [x] Add tests for successful token validation
+  - [x] Add tests for invalid signature handling
+  - [x] Add tests for malformed token handling
+  - [x] Add tests for expired token handling
+  - [x] Decide how authenticated user identity will be attached to request handling later
 - [ ] Add signup endpoint
+  - [x] Create signup request and response types
+  - [x] Add an HTTP handler for `POST /signup`
+  - [x] Parse and validate the incoming JSON body
+  - [ ] Reject requests with missing username or password
+  - [ ] Hash the submitted password before building the user model
+  - [ ] Create a new user record through the user store
+  - [ ] Translate duplicate-username errors into the correct HTTP response
+  - [ ] Generate an access token for the newly created user
+  - [ ] Return a safe signup response without exposing the password hash
+  - [ ] Wire the signup handler into the router
+  - [ ] Add tests for successful signup
+  - [ ] Add tests for invalid request bodies
+  - [ ] Add tests for missing required fields
+  - [ ] Add tests for duplicate username handling
 - [ ] Add login endpoint
 - [ ] Add authenticated profile or session-check endpoint
 - [ ] Add message persistence
