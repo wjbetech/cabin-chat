@@ -189,8 +189,8 @@ Tasks:
   - [x] Hash the submitted password before building the user model
   - [x] Create a new user record through the user store
   - [x] Translate duplicate-username errors into the correct HTTP response
-  - [ ] Generate an access token for the newly created user
-  - [ ] Return a safe signup response without exposing the password hash
+  - [x] Generate an access token for the newly created user
+  - [x] Return a safe signup response without exposing the password hash
   - [ ] Wire the signup handler into the router
   - [ ] Add tests for successful signup
   - [ ] Add tests for invalid request bodies

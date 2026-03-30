@@ -91,12 +91,28 @@ func (handler signupHandler) handle(writer http.ResponseWriter, request *http.Re
 		return
 	}
 	
-	// this is a blank identifier in Go
-	// - 'take this value but do not keep it
-	// - useful when you need to call a function that returns a value but you don't care about the value
-	// = in Go just reassigns an existing var
-	_ = token
+	response := signupResponse {
+		UserID: user.ID,
+		Username: user.Username,
+		Token: token,
+	}
 	
+	responseBody, err := json.Marshal(response)
+	
+	if err != nil {
+		http.Error(writer, "failed to encode response", http.StatusInternalServerError)
+		
+		return
+	}
+	
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusCreated)
+	
+	_, err = writer.Write(responseBody)
+	
+	if err != nil {
+		return
+	}
 	
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }
