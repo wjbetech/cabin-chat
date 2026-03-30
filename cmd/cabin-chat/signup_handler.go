@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
 
@@ -33,6 +34,7 @@ func (handler signupHandler) handle(writer http.ResponseWriter, request *http.Re
 	
 	var signupReq signupRequest
 	
+	// := declares and inits a new variable
 	decoder := json.NewDecoder(request.Body)
 	decoder.DisallowUnknownFields()
 	
@@ -70,10 +72,31 @@ func (handler signupHandler) handle(writer http.ResponseWriter, request *http.Re
 	err = handler.userStore.CreateUser(request.Context(), user)
 	
 	if err != nil {
+		if errors.Is(err, store.ErrUserAlreadyExists) {
+			http.Error(writer, "username already exists", http.StatusConflict)
+			
+			return
+		}
+		
 		http.Error(writer, "failed to create user", http.StatusInternalServerError)
 		
 		return
 	}
+	
+	token, err := auth.GenerateJWTAccessToken(user.ID, handler.jwtSecret, 24*time.Hour)
+	
+	if err != nil {
+		http.Error(writer, "failed to generate access token", http.StatusInternalServerError)
+		
+		return
+	}
+	
+	// this is a blank identifier in Go
+	// - 'take this value but do not keep it
+	// - useful when you need to call a function that returns a value but you don't care about the value
+	// = in Go just reassigns an existing var
+	_ = token
+	
 	
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }
