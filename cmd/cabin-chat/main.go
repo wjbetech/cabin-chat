@@ -8,6 +8,7 @@ import (
 
 	"github.com/wjbetech/cabin-chat/pkg/db"
 	"github.com/wjbetech/cabin-chat/pkg/env"
+	"github.com/wjbetech/cabin-chat/pkg/store"
 )
 
 func main() {
@@ -19,6 +20,8 @@ func main() {
 	ctx := context.Background()
 
 	databaseStatus := "disabled"
+	
+	var userStore store.UserStore
 
 	if cfg.DatabaseURL != "" {
 		postgresDB, err := db.OpenPostgres(ctx, cfg.DatabaseURL)
@@ -31,6 +34,8 @@ func main() {
 				log.Printf("close postgres connection: %v", err)
 			}
 		}()
+		
+		userStore = store.NewPostgresUserStore(postgresDB)
 
 		databaseStatus = "connected"
 		log.Printf("postgres connection established")
@@ -52,6 +57,10 @@ func main() {
 		_, _ = fmt.Fprintf(writer,
 			"status: %d | health: ok | service: cabin-chat | database: %s", status, databaseStatus)
 	})
+	
+	if userStore != nil {
+		mux.HandleFunc("/signup", newSignupHandler(userStore, cfg.JWTSecret))
+	}
 
 	address := fmt.Sprintf(":%s", cfg.Port)
 	log.Printf("starting cabin-chat server on %s", address)

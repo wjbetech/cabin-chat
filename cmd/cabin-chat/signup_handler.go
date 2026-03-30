@@ -114,5 +114,4 @@ func (handler signupHandler) handle(writer http.ResponseWriter, request *http.Re
 		return
 	}
 	
-	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }
