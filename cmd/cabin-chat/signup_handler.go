@@ -3,8 +3,11 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/wjbetech/cabin-chat/pkg/auth"
+	"github.com/wjbetech/cabin-chat/pkg/chat"
+	"github.com/wjbetech/cabin-chat/pkg/id"
 	"github.com/wjbetech/cabin-chat/pkg/store"
 )
 
@@ -55,7 +58,22 @@ func (handler signupHandler) handle(writer http.ResponseWriter, request *http.Re
 		return
 	}
 	
-	_ = hashedPassword
+	user := chat.User {
+		ID: id.New(),
+		Username: signupReq.Username,
+		HashedPassword: hashedPassword,
+		CreatedAt: time.Now().UTC(),
+		Status: "offline",
+		AvatarURL: "",
+	}
+	
+	err = handler.userStore.CreateUser(request.Context(), user)
+	
+	if err != nil {
+		http.Error(writer, "failed to create user", http.StatusInternalServerError)
+		
+		return
+	}
 	
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }
