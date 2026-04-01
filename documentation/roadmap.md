@@ -166,7 +166,7 @@ Tasks:
   - [x] Add tests for successful password comparison
   - [x] Add tests for failed password comparison with the wrong password
   - [x] Decide where hashing should happen in the signup flow before persistence
-- [-] Add JWT creation and validation
+- [x] Add JWT creation and validation
   - [x] Choose a JWT library for signing and parsing tokens
   - [x] Create a dedicated JWT helper file in `pkg/auth`
   - [x] Decide which claims Cabin Chat needs in the token
@@ -181,7 +181,7 @@ Tasks:
   - [x] Add tests for malformed token handling
   - [x] Add tests for expired token handling
   - [x] Decide how authenticated user identity will be attached to request handling later
-- [ ] Add signup endpoint
+- [x] Add signup endpoint
   - [x] Create signup request and response types
   - [x] Add an HTTP handler for `POST /signup`
   - [x] Parse and validate the incoming JSON body
@@ -196,8 +196,8 @@ Tasks:
   - [x] Add tests for invalid request bodies
   - [x] Add tests for missing required fields
   - [x] Add tests for duplicate username handling
-- [ ] Add login endpoint
-  - [ ] Create login request and response types
+- [-] Add login endpoint
+  - [x] Create login request and response types
   - [ ] Add an HTTP handler for `POST /login`
   - [ ] Parse and validate the incoming JSON body
   - [ ] Reject requests with missing username or password
