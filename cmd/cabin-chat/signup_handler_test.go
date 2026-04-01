@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -247,4 +248,61 @@ func TestSignupHandlerMissingRequiredFields(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSignupHandlerDuplicateUsername(t *testing.T) {
+    testCases := []struct {
+        name      string
+        createErr error
+    }{
+        {
+            name:      "direct error",
+            createErr: store.ErrUserAlreadyExists,
+        },
+        {
+            name:      "wrapped error",
+            createErr: fmt.Errorf("wrapped create failure: %w", store.ErrUserAlreadyExists),
+        },
+    }
+
+    for _, testCase := range testCases {
+        t.Run(testCase.name, func(t *testing.T) {
+            fakeStore := &fakeUserStore{
+                createErr: testCase.createErr,
+            }
+            jwtSecret := "test-secret"
+
+            handler := newSignupHandler(fakeStore, jwtSecret)
+
+            requestBody := `
+            {
+                "username": "testuser",
+                "password": "super-secret-test-password"
+            }`
+
+            request := httptest.NewRequest(http.MethodPost, "/signup", strings.NewReader(requestBody))
+            request.Header.Set("Content-Type", "application/json")
+
+            recorder := httptest.NewRecorder()
+
+            handler(recorder, request)
+
+            response := recorder.Result()
+            defer response.Body.Close()
+
+            if response.StatusCode != http.StatusConflict {
+                t.Fatalf("expected status %d, got %d", http.StatusConflict, response.StatusCode)
+            }
+
+            responseBody := recorder.Body.String()
+
+            if !strings.Contains(responseBody, "username already exists") {
+                t.Fatalf("expected response body to contain %q, got %q", "username already exists", responseBody)
+            }
+
+            if !fakeStore.createCalled {
+                t.Fatal("expected CreateUser to be called for a valid signup request")
+            }
+        })
+    }
 }

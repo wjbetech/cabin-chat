@@ -195,7 +195,7 @@ Tasks:
   - [x] Add tests for successful signup
   - [x] Add tests for invalid request bodies
   - [x] Add tests for missing required fields
-  - [ ] Add tests for duplicate username handling
+  - [x] Add tests for duplicate username handling
 - [ ] Add login endpoint
 - [ ] Add authenticated profile or session-check endpoint
 - [ ] Add message persistence
