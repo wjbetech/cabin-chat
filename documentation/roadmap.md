@@ -191,9 +191,9 @@ Tasks:
   - [x] Translate duplicate-username errors into the correct HTTP response
   - [x] Generate an access token for the newly created user
   - [x] Return a safe signup response without exposing the password hash
-  - [ ] Wire the signup handler into the router
-  - [ ] Add tests for successful signup
-  - [ ] Add tests for invalid request bodies
+  - [x] Wire the signup handler into the router
+  - [x] Add tests for successful signup
+  - [x] Add tests for invalid request bodies
   - [ ] Add tests for missing required fields
   - [ ] Add tests for duplicate username handling
 - [ ] Add login endpoint
