@@ -20,7 +20,7 @@ func main() {
 	ctx := context.Background()
 
 	databaseStatus := "disabled"
-	
+
 	var userStore store.UserStore
 
 	if cfg.DatabaseURL != "" {
@@ -34,7 +34,7 @@ func main() {
 				log.Printf("close postgres connection: %v", err)
 			}
 		}()
-		
+
 		userStore = store.NewPostgresUserStore(postgresDB)
 
 		databaseStatus = "connected"
@@ -57,7 +57,7 @@ func main() {
 		_, _ = fmt.Fprintf(writer,
 			"status: %d | health: ok | service: cabin-chat | database: %s", status, databaseStatus)
 	})
-	
+
 	if userStore != nil {
 		mux.HandleFunc("/signup", newSignupHandler(userStore, cfg.JWTSecret))
 	}

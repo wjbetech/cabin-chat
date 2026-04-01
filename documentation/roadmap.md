@@ -197,6 +197,22 @@ Tasks:
   - [x] Add tests for missing required fields
   - [x] Add tests for duplicate username handling
 - [ ] Add login endpoint
+  - [ ] Create login request and response types
+  - [ ] Add an HTTP handler for `POST /login`
+  - [ ] Parse and validate the incoming JSON body
+  - [ ] Reject requests with missing username or password
+  - [ ] Load the user by username from the user store
+  - [ ] Translate missing-user lookups into a generic invalid-credentials response
+  - [ ] Compare the submitted password against the stored password hash
+  - [ ] Translate password mismatch into the same generic invalid-credentials response
+  - [ ] Generate an access token for the authenticated user
+  - [ ] Return a safe login response without exposing the password hash
+  - [ ] Wire the login handler into the router
+  - [ ] Add tests for successful login
+  - [ ] Add tests for invalid request bodies
+  - [ ] Add tests for missing required fields
+  - [ ] Add tests for unknown username handling
+  - [ ] Add tests for wrong password handling
 - [ ] Add authenticated profile or session-check endpoint
 - [ ] Add message persistence
 - [ ] Create the WebSocket hub
