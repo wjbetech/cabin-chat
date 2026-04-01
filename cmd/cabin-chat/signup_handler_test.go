@@ -167,3 +167,84 @@ func TestSignupHandlerInvalidRequestBody(t *testing.T) {
 		},
 	)}
 }
+
+func TestSignupHandlerMissingRequiredFields(t *testing.T) {
+	testCases := []struct {
+		name string
+		requestBody string
+	} {
+		{
+			name: "missing username",
+			requestBody: `
+			 {
+				"password": "super-secret-test-password"
+			 }
+			`,
+		},
+		{
+			name: "missing password",
+			requestBody: `
+			 {
+				"username": "testuser"
+			 }
+			`,
+		},
+		{
+			name: "missing both username and password",
+			requestBody: `{}`,
+		},
+		{
+			name: "empty username",
+			requestBody: `
+			 {
+				"username": "",
+				"password": "super-secret-test-password"
+			 }
+			`,
+		},
+		{
+			name: "empty password",
+			requestBody: `
+			 {
+				"username": "testuser",
+				"password": ""
+			 }
+			`,
+		},
+	}
+	
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			fakeStore := &fakeUserStore{}
+			jwtSecret := "test-secret"
+			
+			handler := newSignupHandler(fakeStore, jwtSecret)
+			
+			request := httptest.NewRequest(http.MethodPost, "/signup", strings.NewReader(testCase.requestBody))
+			
+			request.Header.Set("Content-Type", "application/json")
+			
+			recorder := httptest.NewRecorder()
+			
+			handler(recorder, request)
+			
+			response := recorder.Result()
+			
+			defer response.Body.Close()
+			
+			if response.StatusCode != http.StatusBadRequest {
+				t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.StatusCode)
+			}
+			
+			responseBody := recorder.Body.String()
+			
+			if !strings.Contains(responseBody, "username and password are required") {
+				t.Fatalf("expected response body to contain 'username and password are required', got '%s'", responseBody)
+			}
+			
+			if fakeStore.createCalled {
+				t.Fatal("expected CreateUser not to be called when required fields are missing, but it was called")
+			}
+		})
+	}
+}
