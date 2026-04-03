@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/wjbetech/cabin-chat/pkg/store"
@@ -46,6 +47,20 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 
 		return
 	}
+
+	user, err := handler.userStore.GetUserByUsername(request.Context(), loginReq.Username)
+
+	if err != nil {
+		if errors.Is(err, store.ErrUserNotFound) {
+			http.Error(writer, "login not yet implemented", http.StatusNotImplemented)
+
+			return
+		}
+
+		return
+	}
+
+	_ = user
 
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }

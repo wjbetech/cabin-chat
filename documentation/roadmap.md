@@ -201,7 +201,7 @@ Tasks:
   - [x] Add an HTTP handler for `POST /login`
   - [x] Parse and validate the incoming JSON body
   - [x] Reject requests with missing username or password
-  - [ ] Load the user by username from the user store
+  - [x] Load the user by username from the user store
   - [ ] Translate missing-user lookups into a generic invalid-credentials response
   - [ ] Compare the submitted password against the stored password hash
   - [ ] Translate password mismatch into the same generic invalid-credentials response
