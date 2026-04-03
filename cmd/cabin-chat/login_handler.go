@@ -41,7 +41,11 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	_ = loginReq
+	if loginReq.Username == "" || loginReq.Password == "" {
+		http.Error(writer, "username and/or password required", http.StatusBadRequest)
+
+		return
+	}
 
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }

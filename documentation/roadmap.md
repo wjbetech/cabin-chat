@@ -200,7 +200,7 @@ Tasks:
   - [x] Create login request and response types
   - [x] Add an HTTP handler for `POST /login`
   - [x] Parse and validate the incoming JSON body
-  - [ ] Reject requests with missing username or password
+  - [x] Reject requests with missing username or password
   - [ ] Load the user by username from the user store
   - [ ] Translate missing-user lookups into a generic invalid-credentials response
   - [ ] Compare the submitted password against the stored password hash
