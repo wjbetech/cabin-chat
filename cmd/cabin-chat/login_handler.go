@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"net/http"
 
 	"github.com/wjbetech/cabin-chat/pkg/store"
@@ -26,6 +27,21 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 
 		return
 	}
+
+	var loginReq loginRequest
+
+	decoder := json.NewDecoder(request.Body)
+	decoder.DisallowUnknownFields()
+
+	err := decoder.Decode(&loginReq)
+
+	if err != nil {
+		http.Error(writer, "invalid JSON body", http.StatusBadRequest)
+
+		return
+	}
+
+	_ = loginReq
 
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }
