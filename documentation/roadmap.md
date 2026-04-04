@@ -203,8 +203,8 @@ Tasks:
   - [x] Reject requests with missing username or password
   - [x] Load the user by username from the user store
   - [x] Translate missing-user lookups into a generic invalid-credentials response
-  - [ ] Compare the submitted password against the stored password hash
-  - [ ] Translate password mismatch into the same generic invalid-credentials response
+  - [x] Compare the submitted password against the stored password hash
+  - [x] Translate password mismatch into the same generic invalid-credentials response
   - [ ] Generate an access token for the authenticated user
   - [ ] Return a safe login response without exposing the password hash
   - [ ] Wire the login handler into the router

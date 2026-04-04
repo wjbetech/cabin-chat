@@ -53,7 +53,7 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 
 	if err != nil {
 		if errors.Is(err, store.ErrUserNotFound) {
-			http.Error(writer, "invalid username or password", http.StatusNotImplemented)
+			http.Error(writer, "invalid username or password", http.StatusUnauthorized)
 
 			return
 		}
@@ -66,7 +66,7 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 	err = auth.CheckPassword(loginReq.Password, user.HashedPassword)
 
 	if err != nil {
-		http.Error(writer, "login not implemented", http.StatusNotImplemented)
+		http.Error(writer, "invalid username or password", http.StatusUnauthorized)
 
 		return
 	}
