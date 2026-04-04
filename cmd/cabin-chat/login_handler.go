@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/wjbetech/cabin-chat/pkg/auth"
 	"github.com/wjbetech/cabin-chat/pkg/store"
 )
 
@@ -52,15 +53,23 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 
 	if err != nil {
 		if errors.Is(err, store.ErrUserNotFound) {
-			http.Error(writer, "login not yet implemented", http.StatusNotImplemented)
+			http.Error(writer, "invalid username or password", http.StatusNotImplemented)
 
 			return
 		}
 
+		http.Error(writer, "failed to load user", http.StatusInternalServerError)
+
 		return
 	}
 
-	_ = user
+	err = auth.CheckPassword(loginReq.Password, user.HashedPassword)
+
+	if err != nil {
+		http.Error(writer, "login not implemented", http.StatusNotImplemented)
+
+		return
+	}
 
 	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }

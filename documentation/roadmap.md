@@ -202,7 +202,7 @@ Tasks:
   - [x] Parse and validate the incoming JSON body
   - [x] Reject requests with missing username or password
   - [x] Load the user by username from the user store
-  - [ ] Translate missing-user lookups into a generic invalid-credentials response
+  - [x] Translate missing-user lookups into a generic invalid-credentials response
   - [ ] Compare the submitted password against the stored password hash
   - [ ] Translate password mismatch into the same generic invalid-credentials response
   - [ ] Generate an access token for the authenticated user
