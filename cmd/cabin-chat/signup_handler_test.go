@@ -15,9 +15,12 @@ import (
 )
 
 type fakeUserStore struct {
-	createdUser  chat.User
-	createErr    error
-	createCalled bool
+	createdUser           chat.User
+	createErr             error
+	createCalled          bool
+	returnUser            chat.User
+	getUserByUsernameErr  error
+	getUserByUsernameCall bool
 }
 
 func (fakeStore *fakeUserStore) CreateUser(ctx context.Context, user chat.User) error {
@@ -32,7 +35,14 @@ func (fakeStore *fakeUserStore) GetUserByID(ctx context.Context, id string) (cha
 }
 
 func (fakeStore *fakeUserStore) GetUserByUsername(ctx context.Context, username string) (chat.User, error) {
-	return chat.User{}, store.ErrUserNotFound
+	fakeStore.getUserByUsernameCall = true
+
+	if fakeStore.getUserByUsernameErr != nil {
+		return chat.User{},
+			fakeStore.getUserByUsernameErr
+	}
+
+	return fakeStore.returnUser, nil
 }
 
 func TestSignupHandlerSuccess(t *testing.T) {

@@ -1,3 +1,12 @@
+// This file is the application entry point and the composition root (a bit like a hub). It's the file that starts the program, wires pieces together, and hands control over to the HTTP server.
+
+// It currently does five main jobs:
+// 1. Loads config (env.Load()) to get port, DB, JWT, etc
+// 2. Sets up infra and Postgres, handling DB work
+// 3. Decides what dependencies exist
+// 4. Registers HTTP routes
+// 5. Starts the HTTP server
+
 package main
 
 import (
@@ -60,6 +69,7 @@ func main() {
 
 	if userStore != nil {
 		mux.HandleFunc("/signup", newSignupHandler(userStore, cfg.JWTSecret))
+		mux.HandleFunc("/login", newLoginHandler(userStore, cfg.JWTSecret))
 	}
 
 	address := fmt.Sprintf(":%s", cfg.Port)

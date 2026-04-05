@@ -89,7 +89,7 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 	responseBody, err := json.Marshal(response)
 
 	if err != nil {
-		http.Error(writer, "failed to generate response", http.StatusInternalServerError)
+		http.Error(writer, "failed to encode response", http.StatusInternalServerError)
 
 		return
 	}
@@ -102,6 +102,4 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 	if err != nil {
 		return
 	}
-
-	http.Error(writer, "not implemented", http.StatusNotImplemented)
 }

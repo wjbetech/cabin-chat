@@ -207,9 +207,9 @@ Tasks:
   - [x] Translate password mismatch into the same generic invalid-credentials response
   - [x] Generate an access token for the authenticated user
   - [x] Return a safe login response without exposing the password hash
-  - [ ] Wire the login handler into the router
-  - [ ] Add tests for successful login
-  - [ ] Add tests for invalid request bodies
+  - [x] Wire the login handler into the router
+  - [x] Add tests for successful login
+  - [x] Add tests for invalid request bodies
   - [ ] Add tests for missing required fields
   - [ ] Add tests for unknown username handling
   - [ ] Add tests for wrong password handling
