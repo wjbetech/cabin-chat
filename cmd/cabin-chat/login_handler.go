@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/wjbetech/cabin-chat/pkg/auth"
 	"github.com/wjbetech/cabin-chat/pkg/store"
@@ -68,6 +69,37 @@ func (handler loginHandler) handle(writer http.ResponseWriter, request *http.Req
 	if err != nil {
 		http.Error(writer, "invalid username or password", http.StatusUnauthorized)
 
+		return
+	}
+
+	token, err := auth.GenerateJWTAccessToken(user.ID, handler.jwtSecret, 24*time.Hour)
+
+	if err != nil {
+		http.Error(writer, "failed to generate access token", http.StatusInternalServerError)
+
+		return
+	}
+
+	response := loginResponse{
+		UserID:   user.ID,
+		Username: user.Username,
+		Token:    token,
+	}
+
+	responseBody, err := json.Marshal(response)
+
+	if err != nil {
+		http.Error(writer, "failed to generate response", http.StatusInternalServerError)
+
+		return
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+
+	_, err = writer.Write(responseBody)
+
+	if err != nil {
 		return
 	}
 

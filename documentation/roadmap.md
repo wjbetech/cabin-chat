@@ -205,8 +205,8 @@ Tasks:
   - [x] Translate missing-user lookups into a generic invalid-credentials response
   - [x] Compare the submitted password against the stored password hash
   - [x] Translate password mismatch into the same generic invalid-credentials response
-  - [ ] Generate an access token for the authenticated user
-  - [ ] Return a safe login response without exposing the password hash
+  - [x] Generate an access token for the authenticated user
+  - [x] Return a safe login response without exposing the password hash
   - [ ] Wire the login handler into the router
   - [ ] Add tests for successful login
   - [ ] Add tests for invalid request bodies
