@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/wjbetech/cabin-chat/pkg/auth"
 	"github.com/wjbetech/cabin-chat/pkg/chat"
+	"github.com/wjbetech/cabin-chat/pkg/store"
 )
 
 func TestLoginHandlerSuccess(t *testing.T) {
@@ -132,5 +134,178 @@ func TestLoginHandlerInvalidRequestBody(t *testing.T) {
 			}
 		},
 		)
+	}
+}
+
+func TestLoginHandlerMissingRequiredFields(t *testing.T) {
+	testCases := []struct {
+		name        string
+		requestBody string
+	}{
+		{
+			name: "missing username",
+			requestBody: `{
+				"password": "super-secret-test-password" 
+			}`,
+		},
+		{
+			name: "missing password",
+			requestBody: `{
+				"username": "testuser"
+			}`,
+		},
+		{
+			name:        "missing both username and password",
+			requestBody: `{}`,
+		},
+		{
+			name: "empty password",
+			requestBody: `{
+				"username": "testuser",
+				"password": ""
+			}`,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			fakeStore := &fakeUserStore{}
+			jwtSecret := "test-secret"
+
+			handler := newLoginHandler(fakeStore, jwtSecret)
+
+			request := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(testCase.requestBody))
+
+			request.Header.Set("Content-Type", "application/json")
+
+			recorder := httptest.NewRecorder()
+
+			handler(recorder, request)
+
+			response := recorder.Result()
+
+			defer response.Body.Close()
+
+			if response.StatusCode != http.StatusBadRequest {
+				t.Fatalf("expected status %d, got %d", http.StatusBadRequest, response.StatusCode)
+			}
+
+			responseBody := recorder.Body.String()
+
+			if !strings.Contains(responseBody, "username and/or password required") {
+				t.Fatalf("expected response body to contain %q, got %q", "username and/or password required", responseBody)
+			}
+
+			if fakeStore.getUserByUsernameCall {
+				t.Fatal("expected GetUserByUsername not to be called when required fields are missing, but it was called")
+			}
+		})
+	}
+}
+
+func TestLoginHandlerUnknownUsername(t *testing.T) {
+	testCases := []struct {
+		name                 string
+		getUserByUsernameErr error
+	}{
+		{
+			name:                 "direct not found error",
+			getUserByUsernameErr: store.ErrUserNotFound,
+		},
+		{
+			name:                 "wrapped not found error",
+			getUserByUsernameErr: fmt.Errorf("wrapped lookup failure: %w", store.ErrUserNotFound),
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			fakeStore := &fakeUserStore{
+				getUserByUsernameErr: testCase.getUserByUsernameErr,
+			}
+
+			jwtSecret := "test-secret"
+
+			handler := newLoginHandler(fakeStore, jwtSecret)
+
+			requestBody := `{
+				"username": "missing-user",
+				"password": "super-secret-test-password"
+			}`
+
+			request := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(requestBody))
+			request.Header.Set("Content-Type", "application/json")
+
+			recorder := httptest.NewRecorder()
+
+			handler(recorder, request)
+
+			response := recorder.Result()
+
+			defer response.Body.Close()
+
+			if response.StatusCode != http.StatusUnauthorized {
+				t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, response.StatusCode)
+			}
+
+			responseBody := recorder.Body.String()
+
+			if !strings.Contains(responseBody, "invalid username or password") {
+				t.Fatalf("expected response body to contain %q, got %q", "invalid username or password", responseBody)
+			}
+
+			if !fakeStore.getUserByUsernameCall {
+				t.Fatal("expected GetUsrerByUsername to be called when looking up user, but it was not called")
+			}
+		})
+	}
+}
+
+func TestLoginHandlerWrongPassword(t *testing.T) {
+	hashedPassword, err := auth.HashPassword("correct-password")
+
+	if err != nil {
+		t.Fatalf("failed to hash password for test setup: %v", err)
+	}
+
+	fakeStore := &fakeUserStore{
+		returnUser: chat.User{
+			ID:             "user12345",
+			Username:       "testuser",
+			HashedPassword: hashedPassword,
+		},
+	}
+
+	jwtSecret := "test-secret"
+
+	handler := newLoginHandler(fakeStore, jwtSecret)
+
+	requestBody := `{
+		"username": "testuser",
+		"password": "wrong-password"
+	}`
+
+	request := httptest.NewRequest(http.MethodPost, "/login", strings.NewReader(requestBody))
+	request.Header.Set("Content-Type", "application/json")
+
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, request)
+
+	response := recorder.Result()
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusUnauthorized {
+		t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, response.StatusCode)
+	}
+
+	responseBody := recorder.Body.String()
+
+	if !strings.Contains(responseBody, "invalid username or password") {
+		t.Fatalf("expected response body to contain %q, got %q", "invalid username or password", responseBody)
+	}
+
+	if !fakeStore.getUserByUsernameCall {
+		t.Fatal("expected GetUserByUsername to be called when looking up user, but it was not called")
 	}
 }

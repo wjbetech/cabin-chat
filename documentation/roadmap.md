@@ -196,7 +196,7 @@ Tasks:
   - [x] Add tests for invalid request bodies
   - [x] Add tests for missing required fields
   - [x] Add tests for duplicate username handling
-- [-] Add login endpoint
+- [x] Add login endpoint
   - [x] Create login request and response types
   - [x] Add an HTTP handler for `POST /login`
   - [x] Parse and validate the incoming JSON body
@@ -210,9 +210,9 @@ Tasks:
   - [x] Wire the login handler into the router
   - [x] Add tests for successful login
   - [x] Add tests for invalid request bodies
-  - [ ] Add tests for missing required fields
-  - [ ] Add tests for unknown username handling
-  - [ ] Add tests for wrong password handling
+  - [x] Add tests for missing required fields
+  - [x] Add tests for unknown username handling
+  - [x] Add tests for wrong password handling
 - [ ] Add authenticated profile or session-check endpoint
 - [ ] Add message persistence
 - [ ] Create the WebSocket hub
