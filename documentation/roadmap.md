@@ -221,7 +221,7 @@ Tasks:
   - [x] Reject requests with a missing `Authorization` header
   - [x] Reject requests with an invalid `Authorization` header format
   - [x] Parse the bearer token from the header value
-  - [ ] Validate the JWT access token
+  - [x] Validate the JWT access token
   - [ ] Reject requests with malformed, expired, or invalid tokens
   - [ ] Extract the authenticated user ID from the validated token claims
   - [ ] Attach the authenticated user ID to the request context

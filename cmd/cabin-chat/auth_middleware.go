@@ -3,6 +3,8 @@ package main
 import (
 	"net/http"
 	"strings"
+
+	"github.com/wjbetech/cabin-chat/pkg/auth"
 )
 
 type authMiddleware struct {
@@ -33,7 +35,15 @@ func (middleware authMiddleware) requireAuth(next http.Handler) http.Handler {
 
 		token := strings.TrimPrefix(authHeader, "Bearer ")
 
-		_ = token
+		claims, err := auth.ParseAndValidateJWTAccessToken(token, middleware.jwtSecret)
+
+		if err != nil {
+			http.Error(writer, "invalid or expired token", http.StatusUnauthorized)
+
+			return
+		}
+
+		_ = claims
 
 		http.Error(writer, "token validation not implemented", http.StatusUnauthorized)
 	})
