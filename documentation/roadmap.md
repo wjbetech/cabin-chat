@@ -214,6 +214,29 @@ Tasks:
   - [x] Add tests for unknown username handling
   - [x] Add tests for wrong password handling
 - [ ] Add authenticated profile or session-check endpoint
+  - [x] Decide whether the endpoint will be `/me`, `/profile`, or `/session` (decided `/session`)
+  - [x] Decide the response shape for the authenticated user payload (decided to mirror the safe public User shape closely)
+  - [x] Create profile or session-check response types
+  - [x] Create middleware to read the `Authorization` header
+  - [x] Reject requests with a missing `Authorization` header
+  - [x] Reject requests with an invalid `Authorization` header format
+  - [ ] Parse the bearer token from the header value
+  - [ ] Validate the JWT access token
+  - [ ] Reject requests with malformed, expired, or invalid tokens
+  - [ ] Extract the authenticated user ID from the validated token claims
+  - [ ] Attach the authenticated user ID to the request context
+  - [ ] Add an HTTP handler for the authenticated profile or session-check endpoint
+  - [ ] Load the authenticated user by ID from the user store
+  - [ ] Translate missing-user lookups into the correct HTTP response
+  - [ ] Return a safe authenticated-user response without exposing the password hash
+  - [ ] Wire the auth middleware and endpoint into the router
+  - [ ] Add tests for successful authenticated profile or session-check requests
+  - [ ] Add tests for missing `Authorization` headers
+  - [ ] Add tests for invalid `Authorization` header formats
+  - [ ] Add tests for malformed tokens
+  - [ ] Add tests for expired tokens
+  - [ ] Add tests for invalid token signatures
+  - [ ] Add tests for unknown authenticated user IDs
 - [ ] Add message persistence
 - [ ] Create the WebSocket hub
 - [ ] Broadcast messages to connected clients
