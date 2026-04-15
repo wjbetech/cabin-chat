@@ -31,6 +31,10 @@ func (middleware authMiddleware) requireAuth(next http.Handler) http.Handler {
 			return
 		}
 
-		http.Error(writer, "not implemented", http.StatusNotImplemented)
+		token := strings.TrimPrefix(authHeader, "Bearer ")
+
+		_ = token
+
+		http.Error(writer, "token validation not implemented", http.StatusUnauthorized)
 	})
 }

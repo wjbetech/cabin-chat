@@ -220,7 +220,7 @@ Tasks:
   - [x] Create middleware to read the `Authorization` header
   - [x] Reject requests with a missing `Authorization` header
   - [x] Reject requests with an invalid `Authorization` header format
-  - [ ] Parse the bearer token from the header value
+  - [x] Parse the bearer token from the header value
   - [ ] Validate the JWT access token
   - [ ] Reject requests with malformed, expired, or invalid tokens
   - [ ] Extract the authenticated user ID from the validated token claims
