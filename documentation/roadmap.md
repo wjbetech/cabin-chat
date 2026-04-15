@@ -222,9 +222,9 @@ Tasks:
   - [x] Reject requests with an invalid `Authorization` header format
   - [x] Parse the bearer token from the header value
   - [x] Validate the JWT access token
-  - [ ] Reject requests with malformed, expired, or invalid tokens
-  - [ ] Extract the authenticated user ID from the validated token claims
-  - [ ] Attach the authenticated user ID to the request context
+  - [x] Reject requests with malformed, expired, or invalid tokens
+  - [x] Extract the authenticated user ID from the validated token claims
+  - [x] Attach the authenticated user ID to the request context
   - [ ] Add an HTTP handler for the authenticated profile or session-check endpoint
   - [ ] Load the authenticated user by ID from the user store
   - [ ] Translate missing-user lookups into the correct HTTP response

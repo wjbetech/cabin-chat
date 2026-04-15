@@ -1,11 +1,16 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"strings"
 
 	"github.com/wjbetech/cabin-chat/pkg/auth"
 )
+
+type authContextKey string
+
+const authContextKeyUserID authContextKey = "authenticatedUserID"
 
 type authMiddleware struct {
 	jwtSecret string
@@ -38,13 +43,15 @@ func (middleware authMiddleware) requireAuth(next http.Handler) http.Handler {
 		claims, err := auth.ParseAndValidateJWTAccessToken(token, middleware.jwtSecret)
 
 		if err != nil {
-			http.Error(writer, "invalid or expired token", http.StatusUnauthorized)
+			http.Error(writer, "malformed, expired or invalid token", http.StatusUnauthorized)
 
 			return
 		}
 
-		_ = claims
+		userID := claims.Subject
 
-		http.Error(writer, "token validation not implemented", http.StatusUnauthorized)
+		requestContext := context.WithValue(request.Context(), authContextKeyUserID, userID)
+
+		next.ServeHTTP(writer, request.WithContext(requestContext))
 	})
 }
