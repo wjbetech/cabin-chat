@@ -226,17 +226,16 @@ Tasks:
   - [x] Extract the authenticated user ID from the validated token claims
   - [x] Attach the authenticated user ID to the request context
   - [ ] Add an HTTP handler for the authenticated profile or session-check endpoint
-  - [ ] Load the authenticated user by ID from the user store
-  - [ ] Translate missing-user lookups into the correct HTTP response
-  - [ ] Return a safe authenticated-user response without exposing the password hash
-  - [ ] Wire the auth middleware and endpoint into the router
-  - [ ] Add tests for successful authenticated profile or session-check requests
-  - [ ] Add tests for missing `Authorization` headers
-  - [ ] Add tests for invalid `Authorization` header formats
-  - [ ] Add tests for malformed tokens
-  - [ ] Add tests for expired tokens
-  - [ ] Add tests for invalid token signatures
-  - [ ] Add tests for unknown authenticated user IDs
+    - [ ] Create a session handler type and constructor
+    - [ ] Add a `GET` method guard for the session handler
+    - [ ] Read the authenticated user ID from the request context
+    - [ ] Load the authenticated user by ID from the user store
+    - [ ] Translate missing-user lookups into the correct HTTP response
+    - [ ] Return the safe session response
+    - [ ] Wire the session handler into the router
+    - [ ] Add tests for the successful session response
+    - [ ] Add tests for missing context user IDs
+    - [ ] Add tests for missing users returned from the store
 - [ ] Add message persistence
 - [ ] Create the WebSocket hub
 - [ ] Broadcast messages to connected clients
