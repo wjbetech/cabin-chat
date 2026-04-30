@@ -225,18 +225,44 @@ Tasks:
   - [x] Reject requests with malformed, expired, or invalid tokens
   - [x] Extract the authenticated user ID from the validated token claims
   - [x] Attach the authenticated user ID to the request context
-  - [ ] Add an HTTP handler for the authenticated profile or session-check endpoint
-    - [ ] Create a session handler type and constructor
-    - [ ] Add a `GET` method guard for the session handler
-    - [ ] Read the authenticated user ID from the request context
-    - [ ] Load the authenticated user by ID from the user store
-    - [ ] Translate missing-user lookups into the correct HTTP response
-    - [ ] Return the safe session response
-    - [ ] Wire the session handler into the router
-    - [ ] Add tests for the successful session response
-    - [ ] Add tests for missing context user IDs
-    - [ ] Add tests for missing users returned from the store
-- [ ] Add message persistence
+  - [-] Add an HTTP handler for the authenticated profile or session-check endpoint
+    - [x] Create a session handler type and constructor
+    - [x] Add a `GET` method guard for the session handler
+    - [x] Read the authenticated user ID from the request context
+    - [x] Load the authenticated user by ID from the user store
+    - [x] Translate missing-user lookups into the correct HTTP response
+    - [x] Return the safe session response
+    - [x] Wire the session handler into the router
+    - [x] Add tests for the successful session response
+    - [x] Add tests for missing context user IDs
+    - [x] Add tests for missing users returned from the store
+- [-] Add message persistence
+  - [x] Decide the message API shape, including whether the first MVP is create-only
+  - [x] Create message request and response types for the HTTP layer
+  - [x] Add authenticated HTTP handler for creating messages
+  - [x] Parse and validate incoming message JSON body
+  - [x] Reject requests with missing room ID, content or other invalid fields
+  - [x] Require auth so only logged-in users can create message
+  - [x] Read auth'd user ID from req context in the msg handler
+  - [x] Generate the message ID in Go before persistence
+  - [x] Set the created-at timestamp in Go before persistence
+  - [x] Persist the msg through the msg store
+  - [x] Translate store errors into the right HTTP responses
+  - [x] Return a safe message response without exposing anything extra
+  - [x] Wire the message handler into the router
+  - [x] Decide whether message history should be served over HTTP now or later through WebSockets
+  - [x] if HTTP history is included now, add an auth'd handler for listing messages by room ID
+  - [x] Read the room ID from the req path or query string, depending on chosen route shape
+  - [x] Load msgs by room ID from the msg store
+  - [x] Return msgs in stable chronological order
+  - [x] Handle empty room history cleanly
+  - [x] Add tests for successful message creation
+  - [x] Add tests for invalid request bodies
+  - [ ] Add tests for missing required field content
+  - [ ] Add tests for unauth'd requests
+  - [ ] Add tests for store failures during msg creation
+  - [ ] Add tests for message history retrieval if that endpoint is exposed
+  - [ ] Add tests for empty room history if that endpoint is exposed
 - [ ] Create the WebSocket hub
 - [ ] Broadcast messages to connected clients
 - [ ] Run `go fmt ./...`

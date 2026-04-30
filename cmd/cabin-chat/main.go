@@ -31,6 +31,7 @@ func main() {
 	databaseStatus := "disabled"
 
 	var userStore store.UserStore
+	var messageStore store.MessageStore
 
 	if cfg.DatabaseURL != "" {
 		postgresDB, err := db.OpenPostgres(ctx, cfg.DatabaseURL)
@@ -45,6 +46,7 @@ func main() {
 		}()
 
 		userStore = store.NewPostgresUserStore(postgresDB)
+		messageStore = store.NewPostgresMessageStore(postgresDB)
 
 		databaseStatus = "connected"
 		log.Printf("postgres connection established")
@@ -70,6 +72,11 @@ func main() {
 	if userStore != nil {
 		mux.HandleFunc("/signup", newSignupHandler(userStore, cfg.JWTSecret))
 		mux.HandleFunc("/login", newLoginHandler(userStore, cfg.JWTSecret))
+
+		authMiddleware := newAuthMiddleware(cfg.JWTSecret)
+		mux.Handle("/session", authMiddleware.requireAuth(newSessionHandler(userStore)))
+
+		mux.Handle("/messages", authMiddleware.requireAuth(newMessageHandler(messageStore)))
 	}
 
 	address := fmt.Sprintf(":%s", cfg.Port)
