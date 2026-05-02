@@ -155,7 +155,7 @@ Tasks:
     - [x] Fetch reactions by message ID
     - [x] Ensure duplicate reactions are rejected by the unique constraint
     - [x] Ensure reactions are removed correctly
-- [ ] Add password hashing with bcrypt
+- [x] Add password hashing with bcrypt
   - [x] Add the bcrypt dependency to the Go module
   - [x] Create a dedicated password helper package or file
   - [x] Add a function to hash a plain-text password
@@ -213,7 +213,7 @@ Tasks:
   - [x] Add tests for missing required fields
   - [x] Add tests for unknown username handling
   - [x] Add tests for wrong password handling
-- [ ] Add authenticated profile or session-check endpoint
+- [x] Add authenticated profile or session-check endpoint
   - [x] Decide whether the endpoint will be `/me`, `/profile`, or `/session` (decided `/session`)
   - [x] Decide the response shape for the authenticated user payload (decided to mirror the safe public User shape closely)
   - [x] Create profile or session-check response types
@@ -225,7 +225,7 @@ Tasks:
   - [x] Reject requests with malformed, expired, or invalid tokens
   - [x] Extract the authenticated user ID from the validated token claims
   - [x] Attach the authenticated user ID to the request context
-  - [-] Add an HTTP handler for the authenticated profile or session-check endpoint
+  - [x] Add an HTTP handler for the authenticated profile or session-check endpoint
     - [x] Create a session handler type and constructor
     - [x] Add a `GET` method guard for the session handler
     - [x] Read the authenticated user ID from the request context
@@ -236,7 +236,7 @@ Tasks:
     - [x] Add tests for the successful session response
     - [x] Add tests for missing context user IDs
     - [x] Add tests for missing users returned from the store
-- [-] Add message persistence
+- [x] Add message persistence
   - [x] Decide the message API shape, including whether the first MVP is create-only
   - [x] Create message request and response types for the HTTP layer
   - [x] Add authenticated HTTP handler for creating messages
@@ -258,14 +258,41 @@ Tasks:
   - [x] Handle empty room history cleanly
   - [x] Add tests for successful message creation
   - [x] Add tests for invalid request bodies
-  - [ ] Add tests for missing required field content
-  - [ ] Add tests for unauth'd requests
-  - [ ] Add tests for store failures during msg creation
-  - [ ] Add tests for message history retrieval if that endpoint is exposed
-  - [ ] Add tests for empty room history if that endpoint is exposed
-- [ ] Create the WebSocket hub
-- [ ] Broadcast messages to connected clients
-- [ ] Run `go fmt ./...`
+  - [x] Add tests for missing required field content
+  - [x] Add tests for unauth'd requests
+  - [x] Add tests for store failures during msg creation
+  - [x] Add tests for message history retrieval if that endpoint is exposed
+  - [x] Add tests for empty room history if that endpoint is exposed
+- [x] Create the WebSocket hub
+  - [x] Decide the hub responsibilities and connection model
+    - keep track of clients
+    - register a client when it connects
+    - unregister a client when it disconnects
+    - broadcast a message to all clients
+    - close or drop clients that stop accepting writes
+  - [x] Choose the WebSocket library for connection upgrades
+    - github.com/gorila/websocket seems to be standard
+  - [x] Create a hub type and constructor
+  - [x] Create a client type for connected sockets
+  - [x] Add registration and unregistration channels
+  - [x] Track active clients safely in the hub
+  - [x] Add a hub run loop for connection lifecycle management
+  - [x] Add tests for registering and unregistering clients
+- [x] Broadcast messages to connected clients
+  - [x] Decide how broadcast events enter the hub
+    - keep things simple and make the broadcast payload just the message data the clients need to display
+    - use the same data shape as the API response:
+      - id, userId, roomId, content, createdAt
+    - the message handler already knows the saved message data
+    - the clients require only that exact data to render chat
+    - the hub stays generic and only forwards bytes (messages)
+    - avoid inventing complex systems before they are needed
+  - [x] Define the message payload shape for broadcasts
+  - [x] Add a hub path for sending broadcast messages to all clients
+  - [x] Ensure slow clients are dropped safely during broadcast
+  - [x] Add tests for broadcasting to a connected client
+  - [x] Add tests for dropping a slow or closed client during broadcast
+- [x] Run `go fmt ./...`
 
 Implementation notes:
 

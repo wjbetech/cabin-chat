@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -204,4 +205,155 @@ func TestMessageHandlerMissingRequiredFields(t *testing.T) {
 		})
 	}
 
+}
+
+func TestMessageHandlerUnauthenticatedRequests(t *testing.T) {
+	testCases := []struct {
+		name        string
+		contextUser any
+		requestBody string
+	}{
+		{
+			name:        "missing auth context",
+			contextUser: nil,
+			requestBody: `{
+			"roomId": "room-123",
+			"content": "hello cabin-chat",
+			}`,
+		},
+		{
+			name:        "invalid auth context type",
+			contextUser: 12345,
+			requestBody: `{
+				"roomId": "room-123",
+				"content": "hello cabin-chat"
+			}`,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			fakeStore := &fakeMessageStore{}
+
+			handler := newMessageHandler(fakeStore)
+
+			requestBody := `{
+				"roomId": "room-123",
+				"content": "hello cabin-chat"
+			}`
+
+			request := httptest.NewRequest(http.MethodPost, "/messages", strings.NewReader(requestBody))
+			request.Header.Set("Content-Type", "application/json")
+
+			if testCase.contextUser != nil {
+				request = request.WithContext(context.WithValue(request.Context(), authContextKeyUserID, testCase.contextUser))
+			}
+
+			recorder := httptest.NewRecorder()
+
+			handler(recorder, request)
+
+			response := recorder.Result()
+
+			defer response.Body.Close()
+
+			if response.StatusCode != http.StatusUnauthorized {
+				t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, response.StatusCode)
+			}
+
+			if fakeStore.createCalled {
+				t.Fatal("expected CreateMessage not to be called for unauthenticated requests")
+			}
+
+			responseBody := recorder.Body.String()
+
+			if !strings.Contains(responseBody, "authenticated user ID") {
+				t.Fatalf("expected response body to contain %q, got %q", "authenticated user ID", responseBody)
+			}
+		})
+	}
+}
+
+func TestMessageHandlerUnauthenticatedHistoryRequest(t *testing.T) {
+	testCases := []struct {
+		name        string
+		contextUser any
+	}{
+		{
+			name:        "missing auth context",
+			contextUser: nil,
+		},
+		{
+			name:        "invalid auth context type",
+			contextUser: 12345,
+		},
+	}
+
+	for _, testCase := range testCases {
+		t.Run(testCase.name, func(t *testing.T) {
+			fakeStore := &fakeMessageStore{}
+
+			handler := newMessageHandler(fakeStore)
+
+			request := httptest.NewRequest(http.MethodGet, "/messages?roomId=room-123", nil)
+
+			if testCase.contextUser != nil {
+				request = request.WithContext(context.WithValue(request.Context(), authContextKeyUserID, testCase.contextUser))
+			}
+
+			recorder := httptest.NewRecorder()
+
+			handler(recorder, request)
+
+			response := recorder.Result()
+
+			defer response.Body.Close()
+
+			if response.StatusCode != http.StatusUnauthorized {
+				t.Fatalf("expected status %d, got %d", http.StatusUnauthorized, response.StatusCode)
+			}
+
+			if fakeStore.getCalled {
+				t.Fatal("expected GetMessagesByRoomID not to be called for unauthenticated requests")
+			}
+		})
+	}
+}
+
+func TestMessageHandlerCreateFailure(t *testing.T) {
+	fakeStore := &fakeMessageStore{
+		createErr: errors.New("database is down!"),
+	}
+
+	handler := newMessageHandler(fakeStore)
+
+	requestBody := `{
+		"roomId": "room-123",
+		"content": "hello cabin-chat"
+	}`
+
+	request := httptest.NewRequest(http.MethodPost, "/messages", strings.NewReader(requestBody))
+	request = request.WithContext(context.WithValue(request.Context(), authContextKeyUserID, "user-123"))
+	request.Header.Set("Content-Type", "application/json")
+
+	recorder := httptest.NewRecorder()
+
+	handler(recorder, request)
+
+	response := recorder.Result()
+	defer response.Body.Close()
+
+	if response.StatusCode != http.StatusInternalServerError {
+		t.Fatalf("expected status %d, got %d", http.StatusInternalServerError, response.StatusCode)
+	}
+
+	responseBody := recorder.Body.String()
+
+	if !strings.Contains(responseBody, "failed to create message") {
+		t.Fatalf("expected response body to contain %q, got %q", "failed to create message", responseBody)
+	}
+
+	if !fakeStore.createCalled {
+		t.Fatal("expected CreateMessage to be called when the store returns an error")
+	}
 }
