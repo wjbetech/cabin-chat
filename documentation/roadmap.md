@@ -321,8 +321,8 @@ Goals:
 
 Tasks:
 
-- [ ] Scaffold a Vite + React + TypeScript app
-- [ ] Add TailwindCSS
+- [x] Scaffold a Vite + React + TypeScript app
+- [x] Add TailwindCSS
 - [ ] Add shadcn/ui
 - [ ] Set up the app layout and routing
 - [ ] Build the landing or login entry view
