@@ -323,8 +323,22 @@ Tasks:
 
 - [x] Scaffold a Vite + React + TypeScript app
 - [x] Add TailwindCSS
-- [ ] Add shadcn/ui
-- [ ] Set up the app layout and routing
+- [x] Add daisyUI
+- [-] Set up the app layout and routing
+  - [ ] add React Router and make it the single source of routing
+  - [ ] define initial routes:
+    - /
+    - /login
+    - /signup
+    - /chat
+  - [ ] build a shared app shell
+    - always-visible navbar
+    - top-level theme toggle
+    - main content area that switches by route
+  - [ ] sidebar plus main panel layout for the chat screen
+  - [ ] chat UI is hidden or replaced until the user is authenticated
+  - [ ] landing page is the first public entry point with login/signup
+  - [ ] keep auth guard logic minimal with simple routing 
 - [ ] Build the landing or login entry view
 - [ ] Build the signup view
 - [ ] Build the authenticated chat shell
