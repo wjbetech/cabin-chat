@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
-    <section className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:items-center">
+    <section className="grid gap-8 lg:grid-cols-[minmax(0,1.2fr)_minmax(320px,0.8fr)] lg:items-center px-20">
       <div className="rounded-4xl border-4 border-[#8b5e3c] bg-[linear-gradient(180deg,#fffef7,#fff3d8)] p-4 shadow-[0_14px_0_#8b5e3c]">
         <h1 className="text-2xl">cabin chat</h1>
       </div>
