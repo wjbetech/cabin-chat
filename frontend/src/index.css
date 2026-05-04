@@ -31,3 +31,203 @@ body {
 .font-display {
   font-family: var(--font-display);
 }
+
+.pixel-scene {
+  position: relative;
+  width: min(100%, 36rem);
+  margin-inline: auto;
+  filter: drop-shadow(14px 18px 0 rgba(93, 59, 32, 0.14)) drop-shadow(0 6px 0 rgba(93, 59, 32, 0.1));
+}
+
+.pixel-scene__art {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  overflow: visible;
+}
+
+.pixel-scene__art rect {
+  shape-rendering: crispEdges;
+}
+
+.pixel-scene__soft-shadow {
+  fill: rgba(93, 59, 32, 0.18);
+}
+
+.pixel-scene__tree-dark {
+  fill: #22663e;
+}
+
+.pixel-scene__tree-mid {
+  fill: #3f8f50;
+}
+
+.pixel-scene__tree-light {
+  fill: #77bd5d;
+}
+
+.pixel-scene__outline,
+.pixel-scene__wall-outline,
+.pixel-scene__tree-outline,
+.pixel-scene__camper-outline {
+  fill: #3d2518;
+}
+
+.pixel-scene__tree-trunk,
+.pixel-scene__chimney,
+.pixel-scene__chimney-top,
+.pixel-scene__door,
+.pixel-scene__log {
+  fill: #7a4c2a;
+}
+
+.pixel-scene__wall {
+  fill: #b96e34;
+}
+
+.pixel-scene__wall-dark {
+  fill: #9d552b;
+}
+
+.pixel-scene__roof {
+  fill: #6f3e25;
+}
+
+.pixel-scene__roof-dark {
+  fill: #4e2e1f;
+}
+
+.pixel-scene__roof-light,
+.pixel-scene__roof-pixel,
+.pixel-scene__plank {
+  fill: #d18945;
+}
+
+.pixel-scene__roof-line {
+  fill: #452719;
+}
+
+.pixel-scene__window {
+  fill: #ffd96b;
+  animation: window-glow 2.6s ease-in-out infinite alternate;
+}
+
+.pixel-scene__window-shine {
+  fill: #fff7bc;
+}
+
+.pixel-scene__door-highlight {
+  fill: #9f6335;
+}
+
+.pixel-scene__knob,
+.pixel-scene__flame--inner,
+.pixel-scene__ember {
+  fill: #ffe05f;
+}
+
+.pixel-scene__smoke {
+  fill: rgba(113, 118, 122, 0.34);
+  animation: smoke-rise 2.8s ease-in-out infinite;
+}
+
+.pixel-scene__flame--outer {
+  fill: #ff8a2b;
+  animation: flame-glow 0.9s steps(2, jump-none) infinite alternate;
+}
+
+.pixel-scene__flame--mid {
+  fill: #ffbf3f;
+}
+
+.pixel-scene__stone {
+  fill: #a8907a;
+}
+
+.pixel-scene__stone-dark {
+  fill: #756250;
+}
+
+.pixel-scene__camper {
+  animation: camper-bob 1.7s ease-in-out infinite alternate;
+}
+
+.pixel-scene__camper-hair {
+  fill: #5b3321;
+}
+
+.pixel-scene__camper-face {
+  fill: #f4b879;
+}
+
+.pixel-scene__camper-body {
+  fill: #5bb7d9;
+}
+
+.pixel-scene__camper-scarf {
+  fill: #ff7e70;
+}
+
+.pixel-scene__camper-arm {
+  fill: #f4b879;
+}
+
+.pixel-scene__camper-eye,
+.pixel-scene__camper-boot {
+  fill: #2d1b0d;
+}
+
+@keyframes smoke-rise {
+  0% {
+    opacity: 0;
+    transform: translate(0, 6px);
+  }
+
+  35% {
+    opacity: 0.55;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(8px, -12px);
+  }
+}
+
+@keyframes flame-glow {
+  from {
+    opacity: 0.78;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes camper-bob {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes window-glow {
+  from {
+    opacity: 0.8;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pixel-scene *,
+  .pixel-scene::before,
+  .pixel-scene::after {
+    animation: none !important;
+  }
+}
