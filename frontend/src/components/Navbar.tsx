@@ -24,11 +24,11 @@ export default function Navbar() {
         <NavLink to="/" className={linkClassName}>
           home
         </NavLink>
+        <NavLink to="/signup" className={linkClassName}>
+          sign up
+        </NavLink>
         <NavLink to="/login" className={linkClassName}>
           login
-        </NavLink>
-        <NavLink to="/signup" className={linkClassName}>
-          signup
         </NavLink>
         <NavLink to="/chat" className={linkClassName}>
           chat
