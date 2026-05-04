@@ -34,9 +34,16 @@ body {
 
 .pixel-scene {
   position: relative;
-  width: min(100%, 36rem);
+  width: min(100%, 24rem);
   margin-inline: auto;
-  filter: drop-shadow(14px 18px 0 rgba(93, 59, 32, 0.14)) drop-shadow(0 6px 0 rgba(93, 59, 32, 0.1));
+  filter: drop-shadow(8px 10px 0 rgba(93, 59, 32, 0.14)) drop-shadow(0 4px 0 rgba(93, 59, 32, 0.1));
+}
+
+@media (min-width: 640px) {
+  .pixel-scene {
+    width: min(100%, 36rem);
+    filter: drop-shadow(14px 18px 0 rgba(93, 59, 32, 0.14)) drop-shadow(0 6px 0 rgba(93, 59, 32, 0.1));
+  }
 }
 
 .pixel-scene__art {
