@@ -325,24 +325,24 @@ Tasks:
 - [x] Add TailwindCSS
 - [x] Add daisyUI
 - [-] Set up the app layout and routing
-  - [ ] add React Router and make it the single source of routing
-  - [ ] define initial routes:
+  - [x] add React Router and make it the single source of routing
+  - [x] define initial routes:
     - /
     - /login
     - /signup
     - /chat
-  - [ ] build a shared app shell
+  - [x] build a shared app shell
     - always-visible navbar
     - top-level theme toggle
     - main content area that switches by route
   - [ ] sidebar plus main panel layout for the chat screen
   - [ ] chat UI is hidden or replaced until the user is authenticated
-  - [ ] landing page is the first public entry point with login/signup
-  - [ ] keep auth guard logic minimal with simple routing 
-- [ ] Build the landing or login entry view
-- [ ] Build the signup view
-- [ ] Build the authenticated chat shell
-- [ ] Build the room or conversation list UI
+  - [x] landing page is the first public entry point with login/signup
+  - [ ] keep auth guard logic minimal with simple routing
+- [x] Build the landing or login entry view
+- [x] Build the signup view
+- [x] Build the authenticated chat shell
+- [x] Build the room or conversation list UI
 - [ ] Build the message list UI
 - [ ] Build the message composer
 - [ ] Add mocked data so the UI can be tested before integration
