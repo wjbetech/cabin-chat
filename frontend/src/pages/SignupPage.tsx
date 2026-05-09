@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "../api/auth";
+import { useAuth } from "../context/useAuth";
 
 export default function SignupPage() {
   const [username, setUsername] = useState("");
@@ -9,14 +10,15 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { setAuth } = useAuth();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
     setLoading(true);
     try {
-      const { token } = await signup(username, password);
-      localStorage.setItem("cabin_token", token);
+      const { token, username: signedInUsername } = await signup(username, password);
+      setAuth(token, signedInUsername);
       navigate("/chat");
     } catch (error) {
       setError(error instanceof Error ? error.message : "An unknown error occurred!");
