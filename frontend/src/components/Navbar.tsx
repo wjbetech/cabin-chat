@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const linkClassName = ({ isActive }: { isActive: boolean }) =>
   [
@@ -9,6 +10,14 @@ const linkClassName = ({ isActive }: { isActive: boolean }) =>
     .join(" ");
 
 export default function Navbar() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
+
   return (
     <div className="navbar relative z-10 border-b-4 border-[#8b5e3c] bg-[linear-gradient(180deg,#fff7e5,#ffecc7)] px-4 py-3 shadow-[0_8px_0_#8b5e3c] backdrop-blur">
       <div className="navbar-start">
@@ -24,15 +33,27 @@ export default function Navbar() {
         <NavLink to="/" className={linkClassName}>
           home
         </NavLink>
-        <NavLink to="/signup" className={linkClassName}>
-          sign up
-        </NavLink>
-        <NavLink to="/login" className={linkClassName}>
-          login
-        </NavLink>
-        <NavLink to="/chat" className={linkClassName}>
-          chat
-        </NavLink>
+
+        {user ? (
+          <>
+            <span>{user.username}</span>
+            <NavLink to="/chat" className={linkClassName}>
+              chat
+            </NavLink>
+            <NavLink to="/" onClick={handleLogout} className={linkClassName}>
+              log out
+            </NavLink>
+          </>
+        ) : (
+          <>
+            <NavLink to="/signup" className={linkClassName}>
+              sign up
+            </NavLink>
+            <NavLink to="/login" className={linkClassName}>
+              login
+            </NavLink>
+          </>
+        )}
       </div>
     </div>
   );
