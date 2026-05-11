@@ -366,8 +366,8 @@ Goals:
 
 Tasks:
 
-- [ ] Connect frontend signup to the backend
-- [ ] Connect frontend login to the backend
+- [x] Connect frontend signup to the backend
+- [x] Connect frontend login to the backend
 - [ ] Store the JWT on the client
 - [ ] Send authenticated REST requests with the JWT
 - [ ] Open a WebSocket connection from the frontend

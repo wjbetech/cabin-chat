@@ -56,28 +56,27 @@ export default function LoginPage() {
               />
             </label>
           </div>
-        </form>
+          {error && (
+            <div className="rounded-2xl border-2 border-[#e55353] bg-[#ffe5e5] px-4 py-3 text-sm text-[#a23b3b] mb-4">
+              {error}
+            </div>
+          )}
 
-        {error && (
-          <div className="rounded-2xl border-2 border-[#e55353] bg-[#ffe5e5] px-4 py-3 text-sm text-[#a23b3b] mb-4">
-            {error}
+          <div className="mt-6 flex flex-col items-stretch gap-3">
+            <button
+              type="submit"
+              className="rounded-full border-2 border-[#8b5e3c] bg-[#ffd86e] px-6 py-3 font-extrabold uppercase tracking-wide text-[#5d3b20] shadow-[0_5px_0_#8b5e3c] transition-transform hover:-translate-y-0.5 cursor-pointer"
+              disabled={loading}>
+              log in
+            </button>
+            <p className="text-sm text-[#6f4a29] mt-2">
+              Don't have an account?{" "}
+              <Link to="/signup" className="font-bold text-[#8b5e3c] underline decoration-2 underline-offset-4">
+                sign up
+              </Link>
+            </p>
           </div>
-        )}
-
-        <div className="mt-6 flex flex-col items-stretch gap-3">
-          <button
-            type="submit"
-            className="rounded-full border-2 border-[#8b5e3c] bg-[#ffd86e] px-6 py-3 font-extrabold uppercase tracking-wide text-[#5d3b20] shadow-[0_5px_0_#8b5e3c] transition-transform hover:-translate-y-0.5 cursor-pointer"
-            disabled={loading}>
-            log in
-          </button>
-          <p className="text-sm text-[#6f4a29] mt-2">
-            Don't have an account?{" "}
-            <Link to="/signup" className="font-bold text-[#8b5e3c] underline decoration-2 underline-offset-4">
-              sign up
-            </Link>
-          </p>
-        </div>
+        </form>
       </div>
     </div>
   );
