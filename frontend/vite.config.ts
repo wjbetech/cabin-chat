@@ -11,5 +11,9 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, "")
       }
     }
+  },
+  test: {
+    environment: "happy-dom",
+    globals: true
   }
 });
