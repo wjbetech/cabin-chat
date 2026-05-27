@@ -30,13 +30,12 @@ export default function Navbar() {
       </div>
 
       <div className="navbar-end gap-2">
-        <NavLink to="/" className={linkClassName}>
-          home
-        </NavLink>
-
         {user ? (
           <>
-            <span>{user.username}</span>
+            <span className="mr-2">Hi, {user.username}!</span>
+            <NavLink to="/" className={linkClassName}>
+              home
+            </NavLink>
             <NavLink to="/chat" className={linkClassName}>
               chat
             </NavLink>

@@ -7,6 +7,7 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import { AuthProvider } from "./context/AuthContext";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
@@ -24,8 +25,10 @@ function App() {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/signup" element={<SignupPage />} />
               </Route>
-              <Route element={<ChatLayout />}>
-                <Route path="/chat" element={<ChatPage />} />
+              <Route element={<RequireAuth />}>
+                <Route element={<ChatLayout />}>
+                  <Route path="/chat" element={<ChatPage />} />
+                </Route>
               </Route>
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>

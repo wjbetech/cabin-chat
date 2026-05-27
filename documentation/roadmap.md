@@ -372,8 +372,8 @@ Tasks:
 - [-] Send authenticated REST requests with the JWT
   - [x] Add an `authHeaders()` helper in `src/api/` that reads the token from localStorage and returns the Authorization header
   - [x] Add a `getSession()` function in `src/api/auth.ts` that calls `GET /session` with the auth header
-  - [ ] Call `getSession()` on app load to verify the stored token is still valid
-  - [ ] Redirect to `/login` if the session check fails or the token is missing
+  - [x] Call `getSession()` on app load to verify the stored token is still valid
+  - [x] Redirect to `/login` if the session check fails or the token is missing
   - [ ] Protect the `/chat` route so unauthenticated users cannot access it
 - [ ] Open a WebSocket connection from the frontend
 - [ ] Validate the user on WebSocket connect
